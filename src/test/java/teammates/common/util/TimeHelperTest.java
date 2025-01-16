@@ -41,6 +41,52 @@ public class TimeHelperTest extends BaseTestCase {
         assertEquals("Mon, 30 Nov 2015, 04:00 AM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
     }
 
+
+    @Test
+    public void testGetMidnightAdjustedInstantBasedOnZoneMCDC() {
+        String zoneId = "UTC";
+        // Tests for forward adjustment
+        Instant notBeforeMidnightByHour = LocalDateTime.of(2015, Month.NOVEMBER, 30, 22, 59).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant notAdjustedNotBeforeMidnightByHour = TimeHelper.getMidnightAdjustedInstantBasedOnZone(notBeforeMidnightByHour, zoneId, false);
+        assertEquals("Mon, 30 Nov 2015, 10:59 PM UTC",
+                TimeHelper.formatInstant(notAdjustedNotBeforeMidnightByHour, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        Instant notBeforeMidnightByMinute = LocalDateTime.of(2015, Month.NOVEMBER, 30, 23, 1).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant notAdjustedNotBeforeMidnightByMinute = TimeHelper.getMidnightAdjustedInstantBasedOnZone(notBeforeMidnightByMinute, zoneId, false);
+        assertEquals("Mon, 30 Nov 2015, 11:01 PM UTC",
+                TimeHelper.formatInstant(notAdjustedNotBeforeMidnightByMinute, zoneId, DATETIME_DISPLAY_FORMAT));
+        
+        Instant beforeMidnight = LocalDateTime.of(2015, Month.NOVEMBER, 30, 23, 59).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant notAdjustedBeforeMidnight = TimeHelper.getMidnightAdjustedInstantBasedOnZone(beforeMidnight, zoneId, false);
+        assertEquals("Mon, 30 Nov 2015, 11:59 PM UTC",
+                TimeHelper.formatInstant(notAdjustedBeforeMidnight, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        Instant adjustedBeforeMidnight = TimeHelper.getMidnightAdjustedInstantBasedOnZone(beforeMidnight, zoneId, true);
+        assertEquals("Tue, 01 Dec 2015, 12:00 AM UTC",
+                TimeHelper.formatInstant(adjustedBeforeMidnight, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        // Tests for backward adjustment
+
+        Instant notMidnightByHour = LocalDateTime.of(2015, Month.NOVEMBER, 30, 1, 0).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant notAdjustedMidnightByHour = TimeHelper.getMidnightAdjustedInstantBasedOnZone(notMidnightByHour, zoneId, false);
+        assertEquals("Mon, 30 Nov 2015, 01:00 AM UTC",
+                TimeHelper.formatInstant(notAdjustedMidnightByHour, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        Instant notMidnightByMinute = LocalDateTime.of(2015, Month.NOVEMBER, 30, 0, 1).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant notAdjustedMidnightByMinute = TimeHelper.getMidnightAdjustedInstantBasedOnZone(notMidnightByMinute, zoneId, false);
+        assertEquals("Mon, 30 Nov 2015, 12:01 AM UTC",
+                TimeHelper.formatInstant(notAdjustedMidnightByMinute, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        Instant midnight = LocalDateTime.of(2015, Month.NOVEMBER, 30, 0, 0).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant notAdjustedMidnight = TimeHelper.getMidnightAdjustedInstantBasedOnZone(midnight, zoneId, true);
+        assertEquals("Mon, 30 Nov 2015, 12:00 AM UTC",
+                TimeHelper.formatInstant(notAdjustedMidnight, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        Instant adjustedMidnight = TimeHelper.getMidnightAdjustedInstantBasedOnZone(midnight, zoneId, false);
+        assertEquals("Sun, 29 Nov 2015, 11:59 PM UTC",
+                TimeHelper.formatInstant(adjustedMidnight, zoneId, DATETIME_DISPLAY_FORMAT));
+    }
+
     @Test
     public void testGetMidnightAdjustedInstantBasedOnZone() {
         String zoneId = "UTC";
