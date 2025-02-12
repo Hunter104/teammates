@@ -689,21 +689,6 @@ describe('SessionSubmissionPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should clear mcq fields when the reset button is clicked', () => {
-    let forms: QuestionSubmissionFormModel[] =  []
-    let form1 = { ...testMcqQuestionSubmissionForm }
-    forms.push(form1)
-
-    component.clearFeedbackResponses(forms)
-
-    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).answer)
-        .toBe("")
-    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).isOther)
-        .toBe(false)
-    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).otherFieldContent)
-        .toBe("")
-  })
-
 
   it('should clear text fields when the reset button is clicked', () => {
     let forms: QuestionSubmissionFormModel[] =  []
@@ -712,8 +697,34 @@ describe('SessionSubmissionPageComponent', () => {
 
     component.clearFeedbackResponses(forms)
 
-    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackTextResponseDetails).answer)
-        .toBe("")
+    const textResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackTextResponseDetails
+    expect(textResponse.answer).toBe("")
+  })
+
+  it('should clear mcq fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testMcqQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    const mcqResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails
+    expect(mcqResponse.answer).toBe("")
+    expect(mcqResponse.isOther).toBe(false)
+    expect(mcqResponse.otherFieldContent).toBe("")
+  })
+
+  it('should clear MSQ fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testTextQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    const msqResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMsqResponseDetails
+    expect(msqResponse.answers.every(answer => answer === "")).toBeTruthy()
+    expect(msqResponse.isOther).toBeFalsy()
+    expect(msqResponse.otherFieldContent).toBe("")
   })
 
   it('should create', () => {
