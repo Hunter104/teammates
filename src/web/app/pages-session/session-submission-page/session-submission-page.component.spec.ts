@@ -727,6 +727,18 @@ describe('SessionSubmissionPageComponent', () => {
     expect(msqResponse.otherFieldContent).toBe("")
   })
 
+  it('should clear numscale fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testNumscaleQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    const numscaleResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackNumericalScaleResponseDetails
+    const questionDetails = form1.questionDetails as FeedbackNumericalScaleQuestionDetails;
+    expect(numscaleResponse.answer).toBe(questionDetails.minScale);
+  })
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
