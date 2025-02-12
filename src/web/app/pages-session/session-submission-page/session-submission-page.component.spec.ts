@@ -698,6 +698,10 @@ describe('SessionSubmissionPageComponent', () => {
 
     expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).answer)
         .toBe("")
+    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).isOther)
+        .toBe(false)
+    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).otherFieldContent)
+        .toBe("")
   })
 
   it('should create', () => {
