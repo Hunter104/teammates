@@ -1126,37 +1126,34 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
     this.resetFeedbackResponses(recipientQSForms, recipientId);
   }
 
+  clearResponse(response: FeedbackResponseRecipientSubmissionFormModel) : FeedbackResponseRecipientSubmissionFormModel {
+    const updatedDetails = { ...response.responseDetails }
+    switch (updatedDetails.questionType) {
+      case FeedbackQuestionType.MCQ:
+        const mcqResponse = updatedDetails as FeedbackMcqResponseDetails;
+        mcqResponse.answer = "";
+        mcqResponse.isOther = false;
+        mcqResponse.otherFieldContent = "";
+        break;
+      case FeedbackQuestionType.TEXT:
+        const textResponse = updatedDetails as FeedbackTextResponseDetails;
+        textResponse.answer = "";
+        break;
+    }
+
+    return {...response, responseDetails: updatedDetails}
+  }
+
   clearFeedbackResponses(questionSubmissionForms: QuestionSubmissionFormModel[]): void {
-    questionSubmissionForms.forEach((questionSubmissionFormModel: QuestionSubmissionFormModel, index) => {
-      const updatedRecipientSubmissionForms = questionSubmissionFormModel.recipientSubmissionForms.map(
-          (feedbackResponseRecipientSubmissionFormModel: FeedbackResponseRecipientSubmissionFormModel) => {
-            const updatedResponse = { ...feedbackResponseRecipientSubmissionFormModel.responseDetails };
-
-            switch (updatedResponse.questionType) {
-              case FeedbackQuestionType.MCQ:
-                const mcqResponse = updatedResponse as FeedbackMcqResponseDetails;
-                mcqResponse.answer = "";
-                mcqResponse.isOther = false;
-                mcqResponse.otherFieldContent = "";
-                break;
-              case FeedbackQuestionType.TEXT:
-                const textResponse = updatedResponse as FeedbackTextResponseDetails;
-                textResponse.answer = "";
-                break;
-            }
-
-            return {
-              ...feedbackResponseRecipientSubmissionFormModel,
-              responseDetails: updatedResponse,
-            };
-          }
-      );
+    for (const [index, questionForm] of questionSubmissionForms.entries()) {
+      const updatedRecipientSubmissionForms =
+          questionForm.recipientSubmissionForms.map(this.clearResponse);
 
       questionSubmissionForms[index] = {
-        ...questionSubmissionFormModel,
+        ...questionForm,
         recipientSubmissionForms: updatedRecipientSubmissionForms,
       };
-    });
+    }
   }
 
   resetFeedbackResponses(questionSubmissionForms: QuestionSubmissionFormModel[], recipientId: string | null): void {
