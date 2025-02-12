@@ -23,9 +23,11 @@ import {StudentService} from '../../../services/student.service';
 import {TimezoneService} from '../../../services/timezone.service';
 import {
   AuthInfo,
-  Course,
+  Course, FeedbackConstantSumResponseDetails,
   FeedbackMcqResponseDetails,
-  FeedbackMsqResponseDetails, FeedbackNumericalScaleQuestionDetails, FeedbackNumericalScaleResponseDetails,
+  FeedbackMsqResponseDetails,
+  FeedbackNumericalScaleQuestionDetails,
+  FeedbackNumericalScaleResponseDetails,
   FeedbackParticipantType,
   FeedbackQuestion,
   FeedbackQuestionRecipient,
@@ -1152,6 +1154,13 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
         const details = question.questionDetails as FeedbackNumericalScaleQuestionDetails;
         numscaleResponse.answer = details.minScale;
         break;
+      case FeedbackQuestionType.CONSTSUM:
+      case FeedbackQuestionType.CONSTSUM_OPTIONS:
+      case FeedbackQuestionType.CONSTSUM_RECIPIENTS:
+        const constSumResponse = updatedDetails as FeedbackConstantSumResponseDetails;
+        constSumResponse.answers.length = 0;
+        break;
+
     }
 
     return {...response, responseDetails: updatedDetails}
