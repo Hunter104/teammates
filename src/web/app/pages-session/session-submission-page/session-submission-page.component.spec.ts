@@ -757,6 +757,17 @@ describe('SessionSubmissionPageComponent', () => {
     }
   })
 
+  it('should clear contrib fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testContribQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    const contribResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackContributionResponseDetails
+    expect(contribResponse.answer).toBe(0);
+  })
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
