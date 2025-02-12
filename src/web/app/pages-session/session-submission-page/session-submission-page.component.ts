@@ -24,7 +24,7 @@ import {TimezoneService} from '../../../services/timezone.service';
 import {
   AuthInfo,
   Course,
-  FeedbackMcqResponseDetails,
+  FeedbackMcqResponseDetails, FeedbackMsqResponseDetails,
   FeedbackParticipantType,
   FeedbackQuestion,
   FeedbackQuestionRecipient,
@@ -35,7 +35,8 @@ import {
   FeedbackResponses,
   FeedbackSession,
   FeedbackSessionLogType,
-  FeedbackSessionSubmissionStatus, FeedbackTextResponseDetails,
+  FeedbackSessionSubmissionStatus,
+  FeedbackTextResponseDetails,
   Instructor,
   NumberOfEntitiesToGiveFeedbackToSetting,
   RegkeyValidity,
@@ -1138,6 +1139,12 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
       case FeedbackQuestionType.TEXT:
         const textResponse = updatedDetails as FeedbackTextResponseDetails;
         textResponse.answer = "";
+        break;
+      case FeedbackQuestionType.MSQ:
+        const msqResponse = updatedDetails as FeedbackMsqResponseDetails;
+        msqResponse.answers.length = 0;
+        msqResponse.isOther = false;
+        msqResponse.otherFieldContent = "";
         break;
     }
 
