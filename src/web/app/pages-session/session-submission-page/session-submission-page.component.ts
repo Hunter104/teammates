@@ -24,7 +24,8 @@ import {TimezoneService} from '../../../services/timezone.service';
 import {
   AuthInfo,
   Course,
-  FeedbackMcqResponseDetails, FeedbackMsqResponseDetails,
+  FeedbackMcqResponseDetails,
+  FeedbackMsqResponseDetails, FeedbackNumericalScaleQuestionDetails, FeedbackNumericalScaleResponseDetails,
   FeedbackParticipantType,
   FeedbackQuestion,
   FeedbackQuestionRecipient,
@@ -1127,9 +1128,9 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
     this.resetFeedbackResponses(recipientQSForms, recipientId);
   }
 
-  clearResponse(response: FeedbackResponseRecipientSubmissionFormModel) : FeedbackResponseRecipientSubmissionFormModel {
+  clearResponse(response: FeedbackResponseRecipientSubmissionFormModel, question: QuestionSubmissionFormModel) : FeedbackResponseRecipientSubmissionFormModel {
     const updatedDetails = { ...response.responseDetails }
-    switch (updatedDetails.questionType) {
+    switch (question.questionType) {
       case FeedbackQuestionType.MCQ:
         const mcqResponse = updatedDetails as FeedbackMcqResponseDetails;
         mcqResponse.answer = "";
@@ -1146,6 +1147,11 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
         msqResponse.isOther = false;
         msqResponse.otherFieldContent = "";
         break;
+      case FeedbackQuestionType.NUMSCALE:
+        const numscaleResponse = updatedDetails as FeedbackNumericalScaleResponseDetails;
+        const details = question.questionDetails as FeedbackNumericalScaleQuestionDetails;
+        numscaleResponse.answer = details.minScale;
+        break;
     }
 
     return {...response, responseDetails: updatedDetails}
@@ -1154,7 +1160,7 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
   clearFeedbackResponses(questionSubmissionForms: QuestionSubmissionFormModel[]): void {
     for (const [index, questionForm] of questionSubmissionForms.entries()) {
       const updatedRecipientSubmissionForms =
-          questionForm.recipientSubmissionForms.map(this.clearResponse);
+          questionForm.recipientSubmissionForms.map(form => this.clearResponse(form, questionForm));
 
       questionSubmissionForms[index] = {
         ...questionForm,
