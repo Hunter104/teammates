@@ -704,6 +704,18 @@ describe('SessionSubmissionPageComponent', () => {
         .toBe("")
   })
 
+
+  it('should clear text fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testTextQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackTextResponseDetails).answer)
+        .toBe("")
+  })
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
