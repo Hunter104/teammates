@@ -1,25 +1,24 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
-import { of, throwError } from 'rxjs';
-import SpyInstance = jest.SpyInstance;
-import { SavingCompleteModalComponent } from './saving-complete-modal/saving-complete-modal.component';
-import { SessionSubmissionPageComponent } from './session-submission-page.component';
-import { environment } from '../../../environments/environment';
-import { AuthService } from '../../../services/auth.service';
-import { FeedbackQuestionsService } from '../../../services/feedback-questions.service';
-import { FeedbackResponseCommentService } from '../../../services/feedback-response-comment.service';
-import { FeedbackResponsesService } from '../../../services/feedback-responses.service';
-import { FeedbackSessionsService } from '../../../services/feedback-sessions.service';
-import { InstructorService } from '../../../services/instructor.service';
-import { NavigationService } from '../../../services/navigation.service';
-import { SimpleModalService } from '../../../services/simple-modal.service';
-import { StudentService } from '../../../services/student.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {FormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivatedRoute} from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgxPageScrollCoreModule} from 'ngx-page-scroll-core';
+import {of, throwError} from 'rxjs';
+import {SavingCompleteModalComponent} from './saving-complete-modal/saving-complete-modal.component';
+import {SessionSubmissionPageComponent} from './session-submission-page.component';
+import {environment} from '../../../environments/environment';
+import {AuthService} from '../../../services/auth.service';
+import {FeedbackQuestionsService} from '../../../services/feedback-questions.service';
+import {FeedbackResponseCommentService} from '../../../services/feedback-response-comment.service';
+import {FeedbackResponsesService} from '../../../services/feedback-responses.service';
+import {FeedbackSessionsService} from '../../../services/feedback-sessions.service';
+import {InstructorService} from '../../../services/instructor.service';
+import {NavigationService} from '../../../services/navigation.service';
+import {SimpleModalService} from '../../../services/simple-modal.service';
+import {StudentService} from '../../../services/student.service';
 import {
   AuthInfo,
   CommentVisibilityType,
@@ -59,20 +58,19 @@ import {
   SessionVisibleSetting,
   Student,
 } from '../../../types/api-output';
-import { Intent } from '../../../types/api-request';
-import { Milliseconds } from '../../../types/datetime-const';
-import { AjaxLoadingModule } from '../../components/ajax-loading/ajax-loading.module';
-import { LoadingRetryModule } from '../../components/loading-retry/loading-retry.module';
-import { LoadingSpinnerModule } from '../../components/loading-spinner/loading-spinner.module';
+import {Intent} from '../../../types/api-request';
+import {Milliseconds} from '../../../types/datetime-const';
+import {AjaxLoadingModule} from '../../components/ajax-loading/ajax-loading.module';
+import {LoadingRetryModule} from '../../components/loading-retry/loading-retry.module';
+import {LoadingSpinnerModule} from '../../components/loading-spinner/loading-spinner.module';
 import {
   FeedbackResponseRecipientSubmissionFormModel,
   QuestionSubmissionFormModel,
 } from '../../components/question-submission-form/question-submission-form-model';
-import {
-  QuestionSubmissionFormModule,
-} from '../../components/question-submission-form/question-submission-form.module';
-import { SimpleModalType } from '../../components/simple-modal/simple-modal-type';
-import { TeammatesCommonModule } from '../../components/teammates-common/teammates-common.module';
+import {QuestionSubmissionFormModule,} from '../../components/question-submission-form/question-submission-form.module';
+import {SimpleModalType} from '../../components/simple-modal/simple-modal-type';
+import {TeammatesCommonModule} from '../../components/teammates-common/teammates-common.module';
+import SpyInstance = jest.SpyInstance;
 
 describe('SessionSubmissionPageComponent', () => {
   const deepCopy: <T>(obj: T) => T = <T>(obj: T) => JSON.parse(JSON.stringify(obj));
@@ -737,6 +735,26 @@ describe('SessionSubmissionPageComponent', () => {
     const numscaleResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackNumericalScaleResponseDetails
     const questionDetails = form1.questionDetails as FeedbackNumericalScaleQuestionDetails;
     expect(numscaleResponse.answer).toBe(questionDetails.minScale);
+  })
+
+
+  it('should clear constsum fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testConstsumQuestionSubmissionForm }
+    let form2 = { ...testConstsumQuestionSubmissionForm }
+    let form3 = { ...testConstsumQuestionSubmissionForm }
+    form2.questionType = FeedbackQuestionType.CONSTSUM;
+    form3.questionType = FeedbackQuestionType.CONSTSUM_OPTIONS;
+    forms.push(form1)
+    forms.push(form2)
+    forms.push(form3)
+
+    component.clearFeedbackResponses(forms)
+
+    for (const response of forms) {
+      const details = response.recipientSubmissionForms[0].responseDetails as FeedbackConstantSumResponseDetails
+      expect(details.answers.length).toBe(0)
+    }
   })
 
   it('should create', () => {
