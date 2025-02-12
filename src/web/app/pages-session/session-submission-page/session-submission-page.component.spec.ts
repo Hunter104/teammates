@@ -689,6 +689,17 @@ describe('SessionSubmissionPageComponent', () => {
     fixture.detectChanges();
   });
 
+  it('should clear mcq fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testMcqQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    expect((forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMcqResponseDetails).answer)
+        .toBe("")
+  })
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
