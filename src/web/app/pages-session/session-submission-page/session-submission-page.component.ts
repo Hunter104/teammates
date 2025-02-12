@@ -23,7 +23,8 @@ import {StudentService} from '../../../services/student.service';
 import {TimezoneService} from '../../../services/timezone.service';
 import {
   AuthInfo,
-  Course, FeedbackConstantSumResponseDetails,
+  Course,
+  FeedbackConstantSumResponseDetails, FeedbackContributionResponseDetails,
   FeedbackMcqResponseDetails,
   FeedbackMsqResponseDetails,
   FeedbackNumericalScaleQuestionDetails,
@@ -1159,6 +1160,10 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
       case FeedbackQuestionType.CONSTSUM_RECIPIENTS:
         const constSumResponse = updatedDetails as FeedbackConstantSumResponseDetails;
         constSumResponse.answers.length = 0;
+        break;
+      case FeedbackQuestionType.CONTRIB:
+        const contribResponse = updatedDetails as FeedbackContributionResponseDetails;
+        contribResponse.answer = 0;
         break;
 
     }
