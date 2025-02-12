@@ -191,6 +191,9 @@
                 ngbTooltip="You can save your responses at any time and come back later to continue."
                 (click)="saveFeedbackResponses(questionSubmissionForms, true, null)" [disabled]="isSavingResponses || isSubmissionFormsDisabled"
         ><tm-ajax-loading *ngIf="isSavingResponses"></tm-ajax-loading>Submit Responses for All Questions</button>
+          <button id="btn-reset" class="btn btn-secondary"
+          ngbTooltip="Reiniciar respostas"
+          (click)="clearFeedbackResponses(questionSubmissionForms)">Clear all responses</button>
       </div>
     </div>
   </div>

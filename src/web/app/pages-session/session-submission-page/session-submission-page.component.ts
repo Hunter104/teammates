@@ -23,7 +23,7 @@ import { StudentService } from '../../../services/student.service';
 import { TimezoneService } from '../../../services/timezone.service';
 import {
   AuthInfo,
-  Course,
+  Course, FeedbackMcqResponseDetails,
   FeedbackParticipantType,
   FeedbackQuestion,
   FeedbackQuestionRecipient,
@@ -1123,6 +1123,35 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
       .filter((questionSubmissionFormModel: QuestionSubmissionFormModel) =>
           questionsToRecipient!.has(questionSubmissionFormModel.questionNumber));
     this.resetFeedbackResponses(recipientQSForms, recipientId);
+  }
+
+  clearFeedbackResponses(questionSubmissionForms: QuestionSubmissionFormModel[]): void {
+    questionSubmissionForms.forEach((questionSubmissionFormModel: QuestionSubmissionFormModel, index) => {
+      const updatedRecipientSubmissionForms = questionSubmissionFormModel.recipientSubmissionForms.map(
+          (feedbackResponseRecipientSubmissionFormModel: FeedbackResponseRecipientSubmissionFormModel) => {
+            const updatedResponse = { ...feedbackResponseRecipientSubmissionFormModel.responseDetails };
+
+            switch (updatedResponse.questionType) {
+              case FeedbackQuestionType.MCQ:
+                const mcqResponse = updatedResponse as FeedbackMcqResponseDetails;
+                mcqResponse.answer = "";
+                mcqResponse.isOther = false;
+                mcqResponse.otherFieldContent = "";
+                break;
+            }
+
+            return {
+              ...feedbackResponseRecipientSubmissionFormModel,
+              responseDetails: updatedResponse,
+            };
+          }
+      );
+
+      questionSubmissionForms[index] = {
+        ...questionSubmissionFormModel,
+        recipientSubmissionForms: updatedRecipientSubmissionForms,
+      };
+    });
   }
 
   resetFeedbackResponses(questionSubmissionForms: QuestionSubmissionFormModel[], recipientId: string | null): void {
