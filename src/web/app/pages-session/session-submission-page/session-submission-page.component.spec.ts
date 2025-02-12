@@ -716,13 +716,13 @@ describe('SessionSubmissionPageComponent', () => {
 
   it('should clear MSQ fields when the reset button is clicked', () => {
     let forms: QuestionSubmissionFormModel[] =  []
-    let form1 = { ...testTextQuestionSubmissionForm }
+    let form1 = { ...testMsqQuestionSubmissionForm }
     forms.push(form1)
 
     component.clearFeedbackResponses(forms)
 
     const msqResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackMsqResponseDetails
-    expect(msqResponse.answers.every(answer => answer === "")).toBeTruthy()
+    expect(msqResponse.answers.length).toBe(0)
     expect(msqResponse.isOther).toBeFalsy()
     expect(msqResponse.otherFieldContent).toBe("")
   })
