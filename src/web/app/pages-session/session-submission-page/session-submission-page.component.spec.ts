@@ -38,7 +38,7 @@ import {
   FeedbackQuestionType,
   FeedbackRankOptionsQuestionDetails,
   FeedbackRankOptionsResponseDetails,
-  FeedbackRankRecipientsQuestionDetails,
+  FeedbackRankRecipientsQuestionDetails, FeedbackRankRecipientsResponseDetails,
   FeedbackResponse,
   FeedbackResponseComment,
   FeedbackResponses,
@@ -778,6 +778,21 @@ describe('SessionSubmissionPageComponent', () => {
 
     const contribResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackRubricResponseDetails
     expect(contribResponse.answer.length).toBe(0);
+  })
+
+  it('should clear rank fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testRankOptionsQuestionSubmissionForm }
+    let form2 = { ...testRankRecipientsQuestionSubmissionForm }
+    forms.push(form1)
+    forms.push(form2)
+
+    component.clearFeedbackResponses(forms)
+
+    const rankOptionsResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackRankOptionsResponseDetails
+    const rankRecipientResponse = forms[1].recipientSubmissionForms[0].responseDetails as FeedbackRankRecipientsResponseDetails
+    expect(rankOptionsResponse.answers.length).toBe(0)
+    expect(rankRecipientResponse.answer).toBe(0)
   })
 
   it('should create', () => {
