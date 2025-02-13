@@ -768,6 +768,18 @@ describe('SessionSubmissionPageComponent', () => {
     expect(contribResponse.answer).toBe(0);
   })
 
+
+  it('should clear rubric fields when the reset button is clicked', () => {
+    let forms: QuestionSubmissionFormModel[] =  []
+    let form1 = { ...testRubricQuestionSubmissionForm }
+    forms.push(form1)
+
+    component.clearFeedbackResponses(forms)
+
+    const contribResponse = forms[0].recipientSubmissionForms[0].responseDetails as FeedbackRubricResponseDetails
+    expect(contribResponse.answer.length).toBe(0);
+  })
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
