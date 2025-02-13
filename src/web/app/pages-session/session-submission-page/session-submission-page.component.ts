@@ -35,9 +35,11 @@ import {
   FeedbackQuestionRecipient,
   FeedbackQuestionRecipients,
   FeedbackQuestionType,
+  FeedbackRankOptionsResponseDetails, FeedbackRankRecipientsResponseDetails,
   FeedbackResponse,
   FeedbackResponseComment,
-  FeedbackResponses, FeedbackRubricResponseDetails,
+  FeedbackResponses,
+  FeedbackRubricResponseDetails,
   FeedbackSession,
   FeedbackSessionLogType,
   FeedbackSessionSubmissionStatus,
@@ -1169,6 +1171,14 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
       case FeedbackQuestionType.RUBRIC:
         const rubricResponse = updatedDetails as FeedbackRubricResponseDetails;
         rubricResponse.answer.length = 0;
+        break;
+      case FeedbackQuestionType.RANK_OPTIONS:
+        const rankOptionsResponse = updatedDetails as FeedbackRankOptionsResponseDetails;
+        rankOptionsResponse.answers.length = 0;
+        break;
+      case FeedbackQuestionType.RANK_RECIPIENTS:
+        const rankRecipientsResponse = updatedDetails as FeedbackRankRecipientsResponseDetails;
+        rankRecipientsResponse.answer = 0;
         break;
 
     }
