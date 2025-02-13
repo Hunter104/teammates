@@ -24,7 +24,8 @@ import {TimezoneService} from '../../../services/timezone.service';
 import {
   AuthInfo,
   Course,
-  FeedbackConstantSumResponseDetails, FeedbackContributionResponseDetails,
+  FeedbackConstantSumResponseDetails,
+  FeedbackContributionResponseDetails,
   FeedbackMcqResponseDetails,
   FeedbackMsqResponseDetails,
   FeedbackNumericalScaleQuestionDetails,
@@ -36,7 +37,7 @@ import {
   FeedbackQuestionType,
   FeedbackResponse,
   FeedbackResponseComment,
-  FeedbackResponses,
+  FeedbackResponses, FeedbackRubricResponseDetails,
   FeedbackSession,
   FeedbackSessionLogType,
   FeedbackSessionSubmissionStatus,
@@ -1164,6 +1165,10 @@ export class SessionSubmissionPageComponent implements OnInit, AfterViewInit {
       case FeedbackQuestionType.CONTRIB:
         const contribResponse = updatedDetails as FeedbackContributionResponseDetails;
         contribResponse.answer = 0;
+        break;
+      case FeedbackQuestionType.RUBRIC:
+        const rubricResponse = updatedDetails as FeedbackRubricResponseDetails;
+        rubricResponse.answer.length = 0;
         break;
 
     }
